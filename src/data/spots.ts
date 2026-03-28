@@ -1,0 +1,113 @@
+export type SpotType = "innout" | "matcha" | "erewhon";
+
+export interface Spot {
+  name: string;
+  brand: string;
+  address: string;
+  lat: number;
+  lng: number;
+  type: SpotType;
+  rating: number;      // star rating (e.g. 4.5)
+  reviewCount: number;  // number of reviews
+}
+
+export const matchaSpots: Spot[] = [
+  { name: "Memorylook", brand: "Memorylook", address: "2881 W Olympic Blvd, Los Angeles, CA 90006", lat: 34.0533, lng: -118.3087, type: "matcha", rating: 4.1, reviewCount: 1335 },
+  { name: "DAMO (Koreatown)", brand: "DAMO", address: "3510 W 8th St, Los Angeles, CA 90005", lat: 34.0584, lng: -118.3130, type: "matcha", rating: 4.6, reviewCount: 1135 },
+  { name: "DAMO (Arts District)", brand: "DAMO", address: "1325 Palmetto St, Ste 100, Los Angeles, CA 90013", lat: 34.0397, lng: -118.2310, type: "matcha", rating: 4.5, reviewCount: 108 },
+  { name: "Stereoscope Coffee (Echo Park)", brand: "Stereoscope Coffee", address: "1501 W Sunset Blvd, Ste B, Los Angeles, CA 90026", lat: 34.0772, lng: -118.2584, type: "matcha", rating: 4.6, reviewCount: 360 },
+  { name: "Stereoscope Coffee (Hollywood)", brand: "Stereoscope Coffee", address: "6677 Santa Monica Blvd, Ste 104, Los Angeles, CA 90038", lat: 34.0904, lng: -118.3367, type: "matcha", rating: 4.7, reviewCount: 225 },
+  { name: "Stereoscope Coffee (Long Beach)", brand: "Stereoscope Coffee", address: "4925 E 2nd St, Long Beach, CA 90803", lat: 33.7596, lng: -118.1293, type: "matcha", rating: 4.5, reviewCount: 375 },
+  { name: "Kettl Tea (Los Feliz)", brand: "Kettl Tea", address: "4677 Hollywood Blvd, Los Angeles, CA 90027", lat: 34.0985, lng: -118.2895, type: "matcha", rating: 4.2, reviewCount: 133 },
+  { name: "Community Goods (Edinburgh Ave)", brand: "Community Goods", address: "710 N Edinburgh Ave, Los Angeles, CA 90046", lat: 34.0833, lng: -118.3612, type: "matcha", rating: 4.0, reviewCount: 1109 },
+  { name: "Community Goods (Pacific Design Center)", brand: "Community Goods", address: "8687 Melrose Ave, West Hollywood, CA 90069", lat: 34.0824, lng: -118.3824, type: "matcha", rating: 4.1, reviewCount: 166 },
+  { name: "Stagger Coffee", brand: "Stagger Coffee", address: "3069 1/2 W 8th St, Los Angeles, CA 90005", lat: 34.0588, lng: -118.3058, type: "matcha", rating: 4.5, reviewCount: 691 },
+  { name: "Maru Coffee (Los Feliz)", brand: "Maru Coffee", address: "1936 Hillhurst Ave, Los Angeles, CA 90027", lat: 34.1044, lng: -118.2871, type: "matcha", rating: 4.8, reviewCount: 772 },
+  { name: "Maru Coffee (Arts District)", brand: "Maru Coffee", address: "1019 S Santa Fe Ave, Los Angeles, CA 90021", lat: 34.0302, lng: -118.2326, type: "matcha", rating: 4.7, reviewCount: 700 },
+  { name: "Maru Coffee (Beverly Hills)", brand: "Maru Coffee", address: "201 N Canon Dr, Beverly Hills, CA 90210", lat: 34.0692, lng: -118.3988, type: "matcha", rating: 4.6, reviewCount: 227 },
+  { name: "Archives Of Us", brand: "Archives Of Us", address: "555 N Spring St, Ste A201, Los Angeles, CA 90012", lat: 34.0584, lng: -118.2382, type: "matcha", rating: 4.6, reviewCount: 353 },
+];
+
+export const innoutSpots: Spot[] = [
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "922 Gayley Ave, Los Angeles, CA 90024", lat: 34.0592, lng: -118.4469, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "9245 Venice Blvd, Los Angeles, CA 90034", lat: 34.0282, lng: -118.3907, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "9149 S Sepulveda Blvd, Los Angeles, CA 90045", lat: 33.9555, lng: -118.3963, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "3640 Cahuenga Blvd, Los Angeles, CA 90068", lat: 34.1378, lng: -118.3388, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "7009 Sunset Blvd, Hollywood, CA 90028", lat: 34.0978, lng: -118.3426, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "5864 Lankershim Blvd, North Hollywood, CA 91601", lat: 34.1685, lng: -118.3791, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "4444 Van Nuys Blvd, Sherman Oaks, CA 91403", lat: 34.1545, lng: -118.4489, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "7930 Van Nuys Blvd, Van Nuys, CA 91402", lat: 34.2097, lng: -118.4489, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "7220 N Balboa Blvd, Van Nuys, CA 91406", lat: 34.2027, lng: -118.5003, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "9858 Balboa Blvd, Northridge, CA 91325", lat: 34.2419, lng: -118.5003, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "8830 Tampa Ave, Northridge, CA 91324", lat: 34.2382, lng: -118.5361, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "13651 Roscoe Blvd, Panorama City, CA 91402", lat: 34.2215, lng: -118.4355, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "19901 Rinaldi St, Porter Ranch, CA 91326", lat: 34.2766, lng: -118.5569, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "6841 Topanga Canyon Blvd, Canoga Park, CA 91303", lat: 34.2027, lng: -118.5994, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "19920 Ventura Blvd, Woodland Hills, CA 91364", lat: 34.1714, lng: -118.5876, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "11455 Laurel Canyon Blvd, San Fernando, CA 91340", lat: 34.2767, lng: -118.4001, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "13864 Foothill Blvd, Sylmar, CA 91342", lat: 34.3072, lng: -118.3729, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "6225 Foothill Blvd, Tujunga, CA 91042", lat: 34.2531, lng: -118.2853, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "761 N First St, Burbank, CA 91502", lat: 34.1829, lng: -118.3095, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "119 S Brand Blvd, Glendale, CA 91204", lat: 34.1441, lng: -118.2548, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "310 N Harvey Dr, Glendale, CA 91206", lat: 34.1589, lng: -118.2225, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "2114 E Foothill Blvd, Pasadena, CA 91107", lat: 34.1473, lng: -118.0972, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "1978 E Colorado Blvd, Pasadena, CA 91107", lat: 34.1407, lng: -118.1137, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "1210 N Atlantic Blvd, Alhambra, CA 91801", lat: 34.0977, lng: -118.1278, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "420 N Santa Anita Ave, Arcadia, CA 91006", lat: 34.1367, lng: -118.0344, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "560 W Huntington Dr, Monrovia, CA 91016", lat: 34.1431, lng: -118.0035, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "988 E Alosta Ave, Azusa, CA 91702", lat: 34.1306, lng: -117.8994, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "1261 S Lone Hill Ave, Glendora, CA 91740", lat: 34.1180, lng: -117.8505, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "4242 N Rosemead Blvd, Rosemead, CA 91770", lat: 34.0820, lng: -118.0723, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "10601 Lower Azusa Rd, Temple City, CA 91780", lat: 34.1063, lng: -118.0570, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "13850 Francisquito Ave, Baldwin Park, CA 91706", lat: 34.0859, lng: -117.9630, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "1371 Grand Ave, Covina, CA 91724", lat: 34.0874, lng: -117.8820, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "15610 San Bernardino Rd, West Covina, CA 91722", lat: 34.0671, lng: -117.9072, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "2940 E Garvey Ave, West Covina, CA 91791", lat: 34.0536, lng: -117.8843, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "15259 Amar Rd, La Puente, CA 91744", lat: 34.0327, lng: -117.9364, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "17849 E Colima Rd, City of Industry, CA 91748", lat: 34.0035, lng: -117.8742, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "21620 E Valley Blvd, City of Industry, CA 91789", lat: 34.0220, lng: -117.8444, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "2505 Garey Ave, Pomona, CA 91767", lat: 34.0634, lng: -117.7514, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "13425 Washington Blvd, Marina Del Rey, CA 90292", lat: 33.9944, lng: -118.4384, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "600 N Sepulveda Blvd, El Segundo, CA 90245", lat: 33.9231, lng: -118.3893, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "3411 W Century Blvd, Inglewood, CA 90303", lat: 33.9462, lng: -118.3633, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "1701 Artesia Blvd, Gardena, CA 90248", lat: 33.8758, lng: -118.3110, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "2200 S Central Ave, Compton, CA 90220", lat: 33.8670, lng: -118.2270, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "20512 Avalon Blvd, Carson, CA 90746", lat: 33.8445, lng: -118.2643, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "3801 Inglewood Ave, Redondo Beach, CA 90278", lat: 33.8776, lng: -118.3530, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "730 W Carson St, Torrance, CA 90502", lat: 33.8308, lng: -118.3050, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "24445 Crenshaw Blvd, Torrance, CA 90505", lat: 33.8031, lng: -118.3263, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "20150 Hawthorne Blvd, Torrance, CA 90503", lat: 33.8385, lng: -118.3523, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "1090 N Western Ave, San Pedro, CA 90732", lat: 33.7572, lng: -118.3024, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "7691 Carson St, Long Beach, CA 90808", lat: 33.8313, lng: -118.1189, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "4041 Lakewood Blvd, Long Beach, CA 90808", lat: 33.8286, lng: -118.1358, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "6391 E Pacific Coast Hwy, Long Beach, CA 90803", lat: 33.7684, lng: -118.1080, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "799 E Spring St, Signal Hill, CA 90755", lat: 33.8004, lng: -118.1567, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "5820 Bellflower Blvd, Lakewood, CA 90713", lat: 33.8480, lng: -118.1300, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "17325 Bellflower Blvd, Bellflower, CA 90706", lat: 33.8806, lng: -118.1300, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "10900 Alondra Blvd, Cerritos, CA 90703", lat: 33.8840, lng: -118.0672, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "8767 Firestone Blvd, Downey, CA 90241", lat: 33.9453, lng: -118.1238, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "14330 Pioneer Blvd, Norwalk, CA 90650", lat: 33.9148, lng: -118.0720, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "11802 Whittier Blvd, Whittier, CA 90601", lat: 33.9764, lng: -118.0268, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "26401 Bouquet Canyon Rd, Santa Clarita, CA 91350", lat: 34.3917, lng: -118.5462, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "28368 Sand Canyon Rd, Santa Clarita, CA 91351", lat: 34.3944, lng: -118.4929, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "25220 The Old Road, Newhall, CA 91381", lat: 34.3825, lng: -118.5394, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "142 E Palmdale Blvd, Palmdale, CA 93550", lat: 34.5791, lng: -118.1086, type: "innout", rating: 4.0, reviewCount: 500 },
+  { name: "In-N-Out Burger", brand: "In-N-Out Burger", address: "2021 W Avenue I, Lancaster, CA 93536", lat: 34.6901, lng: -118.1344, type: "innout", rating: 4.0, reviewCount: 500 },
+];
+
+export const erewhonSpots: Spot[] = [
+  { name: "Erewhon (Grove / Fairfax)", brand: "Erewhon", address: "7660 Beverly Blvd, Los Angeles, CA 90036", lat: 34.0758, lng: -118.3566, type: "erewhon", rating: 4.1, reviewCount: 1080 },
+  { name: "Erewhon (Calabasas)", brand: "Erewhon", address: "26767 Agoura Rd, Calabasas, CA 91302", lat: 34.1367, lng: -118.6609, type: "erewhon", rating: 3.5, reviewCount: 638 },
+  { name: "Erewhon (Venice)", brand: "Erewhon", address: "585 Venice Blvd, Venice, CA 90291", lat: 33.9928, lng: -118.4628, type: "erewhon", rating: 4.0, reviewCount: 537 },
+  { name: "Erewhon (Santa Monica)", brand: "Erewhon", address: "2800 Wilshire Blvd, Santa Monica, CA 90403", lat: 34.0362, lng: -118.4792, type: "erewhon", rating: 4.0, reviewCount: 437 },
+  { name: "Erewhon (Silver Lake)", brand: "Erewhon", address: "4121 Santa Monica Blvd, Los Angeles, CA 90029", lat: 34.0916, lng: -118.2797, type: "erewhon", rating: 4.2, reviewCount: 363 },
+  { name: "Erewhon (Studio City)", brand: "Erewhon", address: "12833 Ventura Blvd, Studio City, CA 91604", lat: 34.1425, lng: -118.3965, type: "erewhon", rating: 4.0, reviewCount: 295 },
+  { name: "Erewhon (Beverly Hills)", brand: "Erewhon", address: "339 N Beverly Dr, Beverly Hills, CA 90210", lat: 34.0693, lng: -118.4005, type: "erewhon", rating: 4.1, reviewCount: 243 },
+  { name: "Erewhon (Culver City)", brand: "Erewhon", address: "9300 Culver Blvd, Suite 101, Culver City, CA 90232", lat: 33.9901, lng: -118.3867, type: "erewhon", rating: 4.0, reviewCount: 169 },
+  { name: "Erewhon (Pasadena)", brand: "Erewhon", address: "475 S Lake Ave, Pasadena, CA 91101", lat: 34.1397, lng: -118.1340, type: "erewhon", rating: 4.1, reviewCount: 401 },
+  { name: "Erewhon (Manhattan Beach)", brand: "Erewhon", address: "1700 Rosecrans Ave, Manhattan Beach, CA 90266", lat: 33.9017, lng: -118.3863, type: "erewhon", rating: 4.0, reviewCount: 150 },
+  { name: "Erewhon (West Hollywood)", brand: "Erewhon", address: "8550 Santa Monica Blvd, West Hollywood, CA 90069", lat: 34.0901, lng: -118.3779, type: "erewhon", rating: 4.0, reviewCount: 85 },
+  { name: "Erewhon (Glendale)", brand: "Erewhon", address: "520 N Glendale Ave, Glendale, CA 91206", lat: 34.1530, lng: -118.2468, type: "erewhon", rating: 4.0, reviewCount: 60 },
+];
+
+export const allSpots: Spot[] = [...matchaSpots, ...innoutSpots, ...erewhonSpots];
