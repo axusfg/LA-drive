@@ -7,17 +7,14 @@ function easeOut(t: number): number {
 export function useCountUp(target: number, duration = 1000): number {
   const [value, setValue] = useState(0);
   const rafRef = useRef<number>(0);
-  const prevTarget = useRef<number | null>(null);
 
   useEffect(() => {
-    if (prevTarget.current === target) return;
-    prevTarget.current = target;
-
     if (target === 0) {
       setValue(0);
       return;
     }
 
+    setValue(0);
     const start = performance.now();
 
     function tick(now: number) {

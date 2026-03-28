@@ -1,11 +1,13 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Geocoder from "./components/Geocoder";
+import type { GeocoderHandle } from "./components/Geocoder";
 import { getRoute, spotsNearRoute } from "./utils/route";
 import type { RouteResult, SpotOnRoute } from "./utils/route";
 import type { Spot } from "./data/spots";
-import { allSpots } from "./data/spots";
+import { allSpots, matchaSpots, innoutSpots, erewhonSpots } from "./data/spots";
+import type { SpotType } from "./data/spots";
 import { isOpenNow, formatHoursForDay } from "./data/hours";
 import SlotCounter from "./components/SlotCounter";
 import { useCountUp } from "./hooks/useCountUp";
@@ -29,6 +31,18 @@ function formatTime12(date: Date): string {
   return m === 0 ? `${hour12}${ampm}` : `${hour12}:${String(m).padStart(2, "0")}${ampm}`;
 }
 
+function neighborhood(address: string): string {
+  // Extract city/neighborhood from "123 Street, City, CA 90000"
+  const parts = address.split(",").map((s) => s.trim());
+  return parts[1] ?? parts[0];
+}
+
+const categorySpots: Record<SpotType, Spot[]> = {
+  innout: innoutSpots,
+  matcha: matchaSpots,
+  erewhon: erewhonSpots,
+};
+
 function spotEmoji(type: string): string {
   return type === "matcha" ? "🍵" : type === "erewhon" ? "🥤" : "🍔";
 }
@@ -51,6 +65,7 @@ function Stars({ rating, reviewCount }: { rating: number; reviewCount: number })
 }
 
 function RouteStats({ distance, duration }: { distance: number; duration: number }) {
+  console.log("[RouteStats] distance:", distance, "duration:", duration);
   const miles = useCountUp(distance / 1609.34);
   const mins = useCountUp(Math.round(duration / 60));
   return (
@@ -61,19 +76,47 @@ function RouteStats({ distance, duration }: { distance: number; duration: number
   );
 }
 
+async function reverseGeocode(coords: [number, number]): Promise<string> {
+  try {
+    const params = new URLSearchParams({
+      access_token: MAPBOX_TOKEN,
+      types: "poi,address,place,locality,neighborhood",
+      limit: "1",
+      language: "en",
+    });
+    const res = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[0]},${coords[1]}.json?${params}`
+    );
+    const data = await res.json();
+    return data.features?.[0]?.place_name ?? `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`;
+  } catch {
+    return `${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`;
+  }
+}
+
 function App() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const prevStartRef = useRef<string | null>(null);
+  const prevEndRef = useRef<string | null>(null);
+  const startGeocoderRef = useRef<GeocoderHandle>(null);
+  const endGeocoderRef = useRef<GeocoderHandle>(null);
 
   const [start, setStart] = useState<{ coords: [number, number]; name: string } | null>(null);
   const [end, setEnd] = useState<{ coords: [number, number]; name: string } | null>(null);
+  const startRef = useRef(start);
+  const endRef = useRef(end);
+  startRef.current = start;
+  endRef.current = end;
   const [route, setRoute] = useState<RouteResult | null>(null);
   const [routeSpots, setRouteSpots] = useState<SpotOnRoute[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({ matcha: true, innout: true, erewhon: true });
+  const [mapHint, setMapHint] = useState<string | null>("Click to set your start");
+  const [expandedCategory, setExpandedCategory] = useState<SpotType | null>(null);
 
   const toggleFilter = (type: keyof typeof filters) =>
     setFilters((f) => ({ ...f, [type]: !f[type] }));
@@ -90,6 +133,39 @@ function App() {
     });
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
     mapRef.current = map;
+
+    map.on("click", async (e) => {
+      const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat];
+      const name = await reverseGeocode(coords);
+
+      if (!startRef.current) {
+        setStart({ coords, name });
+        startGeocoderRef.current?.setValue(name);
+        setMapHint("Click to set your destination");
+      } else if (!endRef.current) {
+        setEnd({ coords, name });
+        endGeocoderRef.current?.setValue(name);
+        setMapHint(null);
+      } else {
+        // Both set — reset and start over
+        setRoute(null);
+        setRouteSpots([]);
+        setError(null);
+        endGeocoderRef.current?.clear();
+        setEnd(null);
+        popupRef.current?.remove();
+        if (map.getSource("route")) {
+          (map.getSource("route") as mapboxgl.GeoJSONSource).setData({
+            type: "FeatureCollection",
+            features: [],
+          });
+        }
+        setStart({ coords, name });
+        startGeocoderRef.current?.setValue(name);
+        setMapHint("Click to set your destination");
+      }
+    });
+
     return () => { map.remove(); mapRef.current = null; };
   }, []);
 
@@ -102,9 +178,11 @@ function App() {
     : allSpots.filter((s) => filters[s.type]);
 
   // Helper to get the spots to render on the map
-  const mapSpots: { spot: Spot; eta: Date | null }[] = displayedRouteSpots
-    ? displayedRouteSpots.map((s) => ({ spot: s.spot, eta: s.eta }))
-    : (displayedAllSpots ?? []).map((s) => ({ spot: s, eta: null }));
+  const mapSpots = useMemo<{ spot: Spot; eta: Date | null }[]>(() => {
+    return displayedRouteSpots
+      ? displayedRouteSpots.map((s) => ({ spot: s.spot, eta: s.eta }))
+      : (displayedAllSpots ?? []).map((s) => ({ spot: s, eta: null }));
+  }, [displayedRouteSpots, displayedAllSpots]);
 
   // Build popup HTML
   function popupHTML(spot: Spot, eta: Date | null): string {
@@ -130,21 +208,61 @@ function App() {
     markersRef.current = [];
     popupRef.current?.remove();
 
+    const startKey = start ? start.coords.join(",") : null;
+    const endKey = end ? end.coords.join(",") : null;
+    const isStartNew = startKey !== prevStartRef.current;
+    const isEndNew = endKey !== prevEndRef.current;
+    prevStartRef.current = startKey;
+    prevEndRef.current = endKey;
+
+    function createPin(
+      type: "start" | "end",
+      coords: [number, number],
+      isNew: boolean,
+      onDragEnd: (coords: [number, number], name: string) => void,
+    ) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `pin-wrapper${isNew ? " dropping" : ""}`;
+
+      const pin = document.createElement("div");
+      pin.className = `pin pin-${type}`;
+      pin.innerHTML = `<span class="pin-emoji">${type === "start" ? "🏠" : "📍"}</span>`;
+
+      const shadow = document.createElement("div");
+      shadow.className = "pin-shadow";
+
+      wrapper.appendChild(pin);
+      wrapper.appendChild(shadow);
+
+      if (isNew) {
+        setTimeout(() => wrapper.classList.remove("dropping"), 1000);
+      }
+
+      const marker = new mapboxgl.Marker({ element: wrapper, draggable: true, anchor: "bottom" })
+        .setLngLat(coords)
+        .addTo(map);
+      marker.on("dragstart", () => wrapper.classList.add("dragging"));
+      marker.on("dragend", async () => {
+        wrapper.classList.remove("dragging");
+        const lngLat = marker.getLngLat();
+        const c: [number, number] = [lngLat.lng, lngLat.lat];
+        const name = await reverseGeocode(c);
+        onDragEnd(c, name);
+      });
+      markersRef.current.push(marker);
+    }
+
     if (start) {
-      const el = document.createElement("div");
-      el.className = "marker start-marker";
-      el.textContent = "A";
-      markersRef.current.push(
-        new mapboxgl.Marker(el).setLngLat(start.coords).addTo(map)
-      );
+      createPin("start", start.coords, isStartNew, (coords, name) => {
+        setStart({ coords, name });
+        startGeocoderRef.current?.setValue(name);
+      });
     }
     if (end) {
-      const el = document.createElement("div");
-      el.className = "marker end-marker";
-      el.textContent = "B";
-      markersRef.current.push(
-        new mapboxgl.Marker(el).setLngLat(end.coords).addTo(map)
-      );
+      createPin("end", end.coords, isEndNew, (coords, name) => {
+        setEnd({ coords, name });
+        endGeocoderRef.current?.setValue(name);
+      });
     }
 
     mapSpots.forEach(({ spot, eta }) => {
@@ -167,6 +285,7 @@ function App() {
       );
     });
   }, [start, end, mapSpots]);
+
 
   // Update route line
   useEffect(() => {
@@ -226,6 +345,30 @@ function App() {
     }
   }, [start, end]);
 
+  const handleClear = useCallback(() => {
+    setStart(null);
+    setEnd(null);
+    setRoute(null);
+    setRouteSpots([]);
+    setError(null);
+    setMapHint("Click to set your start");
+    startGeocoderRef.current?.clear();
+    endGeocoderRef.current?.clear();
+    popupRef.current?.remove();
+
+    // Clear route line from map
+    const map = mapRef.current;
+    if (map && map.getSource("route")) {
+      (map.getSource("route") as mapboxgl.GeoJSONSource).setData({
+        type: "FeatureCollection",
+        features: [],
+      });
+    }
+
+    // Reset map view to default LA overview
+    map?.flyTo({ center: [-118.3, 34.05], zoom: 10 });
+  }, []);
+
   const filteredRouteSpots = displayedRouteSpots ?? [];
   const matchaCount = filteredRouteSpots.filter((s) => s.spot.type === "matcha").length;
   const innoutCount = filteredRouteSpots.filter((s) => s.spot.type === "innout").length;
@@ -234,7 +377,7 @@ function App() {
   return (
     <div className="app">
       <div className="sidebar">
-        <h1>LA drive</h1>
+        <h1>LA Drive</h1>
         <p className="subtitle">find every in-n-out, matcha spot & erewhon on your drive</p>
 
         <div className="toggles">
@@ -261,11 +404,13 @@ function App() {
         <div className="inputs">
           <label>From</label>
           <Geocoder
+            ref={startGeocoderRef}
             placeholder="Starting location..."
             onResult={(coords, name) => setStart({ coords, name })}
           />
           <label>To</label>
           <Geocoder
+            ref={endGeocoderRef}
             placeholder="Destination..."
             onResult={(coords, name) => setEnd({ coords, name })}
           />
@@ -278,6 +423,60 @@ function App() {
         >
           {loading ? "Finding route..." : "Show me the stops"}
         </button>
+
+        {route && (
+          <button className="clear-btn" onClick={handleClear}>
+            Clear route
+          </button>
+        )}
+
+        {!route && (
+          <div className="fun-stats">
+            <div className="fun-stat-cards">
+              {([
+                { type: "innout" as SpotType, emoji: "🍔", label: "In-N-Outs across SoCal", count: 137 },
+                { type: "matcha" as SpotType, emoji: "🍵", label: "matcha spots from 8 brands", count: 16 },
+                { type: "erewhon" as SpotType, emoji: "🥤", label: "Erewhon locations", count: 12 },
+              ]).map(({ type, emoji, label, count }) => {
+                const isOpen = expandedCategory === type;
+                const spots = categorySpots[type];
+                return (
+                  <div key={type} className={`fun-stat-card${isOpen ? " expanded" : ""}`}>
+                    <div
+                      className="fun-stat-header"
+                      onClick={() => setExpandedCategory(isOpen ? null : type)}
+                    >
+                      <span className="fun-stat-emoji">{emoji}</span>
+                      <span className="fun-stat-text">
+                        <strong className={`fun-stat-num ${type}-num`}>{count}</strong> {label}
+                      </span>
+                      <span className={`fun-stat-chevron${isOpen ? " open" : ""}`}>&#8250;</span>
+                    </div>
+                    <div className={`fun-stat-list-wrap${isOpen ? " open" : ""}`}>
+                      <ul className="fun-stat-list">
+                        {spots.map((spot, i) => (
+                          <li
+                            key={i}
+                            className="fun-stat-list-item"
+                            onClick={() => {
+                              const map = mapRef.current;
+                              if (!map) return;
+                              map.flyTo({ center: [spot.lng, spot.lat], zoom: 15 });
+                            }}
+                          >
+                            <span className="fun-stat-list-name">{spot.name}</span>
+                            <span className="fun-stat-list-hood">{neighborhood(spot.address)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="fun-stats-tagline">What are you driving past every day?</p>
+          </div>
+        )}
 
         {error && <p className="error">{error}</p>}
 
@@ -331,6 +530,7 @@ function App() {
 
       <div className="map-container">
         <div ref={mapContainerRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }} />
+        {mapHint && <div className="map-hint">{mapHint}</div>}
       </div>
     </div>
   );

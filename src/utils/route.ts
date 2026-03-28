@@ -27,6 +27,8 @@ export async function getRoute(
   const data = await res.json();
   if (!data.routes?.length) throw new Error("No route found");
   const route = data.routes[0];
+  console.log("[getRoute] full response:", data);
+  console.log("[getRoute] distance (m):", route.distance, "duration (s):", route.duration);
   return {
     geometry: route.geometry,
     duration: route.duration,
