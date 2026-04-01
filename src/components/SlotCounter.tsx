@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /**
  * A single digit column that scrolls vertically through 0-9 to land on the target digit.
@@ -8,23 +8,19 @@ import { useEffect, useRef, useState } from "react";
 function DigitReel({
   digit,
   placeIndex,
-  totalPlaces,
   baseDuration,
 }: {
   digit: number;
-  placeIndex: number; // 0 = ones, 1 = tens, 2 = hundreds ...
-  totalPlaces: number;
+  placeIndex: number;
   baseDuration: number;
 }) {
   const reelRef = useRef<HTMLDivElement>(null);
-  const [settled, setSettled] = useState(false);
 
   // Stagger: ones place finishes at baseDuration, each higher place adds delay
   const staggerPerPlace = 150; // ms extra per place
   const duration = baseDuration + placeIndex * staggerPerPlace;
 
   useEffect(() => {
-    setSettled(false);
     const el = reelRef.current;
     if (!el) return;
 
@@ -43,8 +39,7 @@ function DigitReel({
     el.style.transition = `transform ${duration}ms cubic-bezier(0.22, 1, 0.36, 1)`;
     el.style.transform = `translateY(-${targetOffset}em)`;
 
-    const timer = setTimeout(() => setSettled(true), duration);
-    return () => clearTimeout(timer);
+    return;
   }, [digit, duration]);
 
   return (
@@ -112,7 +107,6 @@ export default function SlotCounter({ value, duration = 1500 }: SlotCounterProps
             key={`${totalPlaces}-${i}`}
             digit={d}
             placeIndex={placeIndex}
-            totalPlaces={totalPlaces}
             baseDuration={duration}
           />
         );

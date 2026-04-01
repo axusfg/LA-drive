@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
+import type { Map as MapboxMap } from "mapbox-gl";
 import { allSpots } from "../data/spots";
 import type { Spot } from "../data/spots";
 
 interface Props {
-  map: mapboxgl.Map | null;
+  map: MapboxMap;
   onSpotClick: (spot: Spot) => void;
 }
 
@@ -19,8 +19,9 @@ function renderStars(rating: number): string {
   return "★".repeat(full) + (half ? "½" : "") + "☆".repeat(empty);
 }
 
-function getVisibleSpots(map: mapboxgl.Map): Spot[] {
+function getVisibleSpots(map: MapboxMap): Spot[] {
   const bounds = map.getBounds();
+  if (!bounds) return [];
   return allSpots.filter((s) =>
     bounds.contains([s.lng, s.lat])
   );

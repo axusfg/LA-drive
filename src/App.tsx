@@ -372,7 +372,7 @@ function App() {
 
       const marker = new mapboxgl.Marker({ element: wrapper, draggable: true, anchor: "bottom" })
         .setLngLat(coords)
-        .addTo(map);
+        .addTo(map!);
       marker.on("dragstart", () => wrapper.classList.add("dragging"));
       marker.on("dragend", async () => {
         wrapper.classList.remove("dragging");
