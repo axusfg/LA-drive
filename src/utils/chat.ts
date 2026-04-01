@@ -3,6 +3,7 @@ import { erewhonProfiles } from "../data/erewhon-profiles";
 import { allSpots } from "../data/spots";
 
 const OPENROUTER_KEY = import.meta.env.VITE_OPENROUTER_API_KEY as string;
+const USE_PROXY = import.meta.env.PROD; // use serverless proxy in production, direct in dev
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -40,23 +41,31 @@ const systemPrompt = buildSystemPrompt();
 export async function sendChat(
   messages: ChatMessage[]
 ): Promise<string> {
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${OPENROUTER_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": window.location.href,
-      "X-Title": "Somewhere in LA",
-    },
-    body: JSON.stringify({
-      model: "anthropic/claude-3.5-haiku",
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...messages.map((m) => ({ role: m.role, content: m.content })),
-      ],
-      max_tokens: 350,
-    }),
-  });
+  const body = {
+    model: "anthropic/claude-3.5-haiku",
+    messages: [
+      { role: "system", content: systemPrompt },
+      ...messages.map((m) => ({ role: m.role, content: m.content })),
+    ],
+    max_tokens: 350,
+  };
+
+  const res = USE_PROXY
+    ? await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+    : await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENROUTER_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": window.location.href,
+          "X-Title": "Somewhere in LA",
+        },
+        body: JSON.stringify(body),
+      });
 
   const data = await res.json();
 

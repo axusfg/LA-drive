@@ -3,6 +3,7 @@ import { allSpots } from "../data/spots";
 import { isOpenNow } from "../data/hours";
 
 const OPENROUTER_KEY = import.meta.env.VITE_OPENROUTER_API_KEY as string;
+const USE_PROXY = import.meta.env.PROD;
 
 // LA coordinates — always use LA weather
 const LA_LAT = 34.05;
@@ -69,19 +70,27 @@ export function useSmartSubtitle(): string {
 
       const prompt = `Generate a single short, warm, poetic subtitle (max 12 words) for a website called "Somewhere in LA" that helps people find matcha shops, In-N-Out, and Erewhon in Los Angeles. It's currently ${timeContext}. ${weatherLine} Right now ${counts.matcha} matcha spots, ${counts.erewhon} Erewhons, and ${counts.innout} In-N-Outs are open. IMPORTANT: You MUST include the actual temperature "${weather?.temp}°" in the subtitle. Make it feel personal, warm, and specific to the time/weather. No quotes, no punctuation at the end, lowercase. Examples of the vibe: "72° and golden — the whole city is open", "58° foggy morning, warm matcha waiting", "81° perfect evening for a drive and a double-double". Be creative, don't copy these examples.`;
 
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${OPENROUTER_KEY}`,
-          "Content-Type": "application/json",
-          "X-Title": "Somewhere in LA",
-        },
-        body: JSON.stringify({
-          model: "anthropic/claude-3.5-haiku",
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: 30,
-        }),
-      });
+      const body = {
+        model: "anthropic/claude-3.5-haiku",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 30,
+      };
+
+      const res = USE_PROXY
+        ? await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          })
+        : await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${OPENROUTER_KEY}`,
+              "Content-Type": "application/json",
+              "X-Title": "Somewhere in LA",
+            },
+            body: JSON.stringify(body),
+          });
 
       const data = await res.json();
       const text = data.choices?.[0]?.message?.content?.trim();
