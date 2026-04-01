@@ -17,6 +17,7 @@ import ErewhonProfile from "./components/ErewhonProfile";
 import SidebarChat from "./components/SidebarChat";
 import SlotCounter from "./components/SlotCounter";
 import { useCountUp } from "./hooks/useCountUp";
+import { useSmartSubtitle } from "./hooks/useSmartSubtitle";
 import "./App.css";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string;
@@ -136,10 +137,11 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({ matcha: true, innout: true, erewhon: true });
-  const [mapHint, setMapHint] = useState<string | null>("Click to set your start");
+  const [mapHint, setMapHint] = useState<string | null>("Click anywhere on the map to set your start");
   const [expandedCategory, setExpandedCategory] = useState<SpotType | null>(null);
   const [profileSpot, setProfileSpot] = useState<Spot | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const smartSubtitle = useSmartSubtitle();
 
   const toggleFilter = (type: keyof typeof filters) =>
     setFilters((f) => ({ ...f, [type]: !f[type] }));
@@ -239,7 +241,7 @@ function App() {
       if (!startRef.current) {
         setStart({ coords, name });
         startGeocoderRef.current?.setValue(name);
-        setMapHint("Click to set your destination");
+        setMapHint("Now click the map to set your destination");
       } else if (!endRef.current) {
         setEnd({ coords, name });
         endGeocoderRef.current?.setValue(name);
@@ -260,7 +262,7 @@ function App() {
         }
         setStart({ coords, name });
         startGeocoderRef.current?.setValue(name);
-        setMapHint("Click to set your destination");
+        setMapHint("Now click the map to set your destination");
       }
     });
 
@@ -541,7 +543,7 @@ function App() {
     setWaypoints([]);
     setAddedSpots(new Set());
     setError(null);
-    setMapHint("Click to set your start");
+    setMapHint("Click anywhere on the map to set your start");
     startGeocoderRef.current?.clear();
     endGeocoderRef.current?.clear();
     popupRef.current?.remove();
@@ -614,13 +616,14 @@ function App() {
         ) : (
         <>
         <h1>Somewhere in LA</h1>
-        <p className="subtitle">find every in-n-out, matcha spot & erewhon on your drive</p>
+        <p className="subtitle">{smartSubtitle}</p>
 
         <div className="sidebar-ask-bar" onClick={() => setChatOpen(true)}>
           <span className="sidebar-ask-icon">✨</span>
           <span className="sidebar-ask-text">Ask me anything about these spots...</span>
         </div>
 
+        <label className="toggles-label">Tap to filter the map</label>
         <div className="toggles">
           <button
             className={`toggle-btn ${filters.matcha ? "active" : "inactive"}`}
@@ -683,7 +686,7 @@ function App() {
             <div className="fun-stat-cards">
               {([
                 { type: "innout" as SpotType, emoji: "🍔", label: "In-N-Outs across SoCal", count: 137 },
-                { type: "matcha" as SpotType, emoji: "🍵", label: "matcha spots from 8 brands", count: 16 },
+                { type: "matcha" as SpotType, emoji: "🍵", label: "matcha spots from 9 brands", count: 22 },
                 { type: "erewhon" as SpotType, emoji: "🥤", label: "Erewhon locations", count: 12 },
               ]).map(({ type, emoji, label, count }) => {
                 const isOpen = expandedCategory === type;
@@ -801,6 +804,12 @@ function App() {
       <div className="map-container">
         <div ref={mapContainerRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }} />
         {mapHint && <div className="map-hint">{mapHint}</div>}
+        <button
+          className="map-reset-btn"
+          onClick={() => mapRef.current?.flyTo({ center: [-118.3, 34.05], zoom: 10, duration: 800 })}
+        >
+          Reset view
+        </button>
       </div>
 
       {profileSpot?.type === "matcha" && (

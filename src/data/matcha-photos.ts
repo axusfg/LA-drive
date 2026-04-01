@@ -28,6 +28,22 @@ export const matchaKnownFor: Record<string, string[]> = {
     ["☕ Slow-Drip Cold Brew", "🍵 Matcha Latte", "☕ Iced Long Black"],
   "Archives Of Us":
     ["🍵 Cream-Topped Matcha", "🧁 Canelés", "☕ Single-Origin Espresso"],
+  "La La Land (Montana Ave)":
+    ["🍵 Banana Cloud Matcha", "🍓 Strawberry Fields Matcha", "🥑 Avocado Toast"],
+  "La La Land (The Grove)":
+    ["🍵 Keith Lee Matcha Latte", "🦋 Butterfly Matcha Latte", "🍌 Banana Cloud Matcha"],
+  "La La Land (3rd Street)":
+    ["🍵 Solar Power Matcha", "🍓 Strawberry Fields Matcha", "🥪 Turkey Avocado Sandwich"],
+  "La La Land (Calabasas)":
+    ["🍵 Banana Cloud Matcha", "🥑 Avocado Toast", "🧃 Mango Passionfruit Cooler"],
+  "La La Land (Americana)":
+    ["🦋 Butterfly Matcha Latte", "🍵 Classic Matcha Latte", "🍌 Banana Cloud Matcha"],
+  "La La Land (Beverly Hills)":
+    ["🍵 Reserve Matcha Latte", "🍓 Strawberry Fields Matcha", "☕ Oat Milk Latte"],
+  "La La Land (Brentwood)":
+    ["🍵 Solar Power Matcha", "🍌 Banana Cloud Matcha", "🥑 Avocado Toast"],
+  "La La Land (Westlake Village)":
+    ["🍵 Classic Matcha Latte", "🧃 Mango Passionfruit Cooler", "🍓 Strawberry Fields Matcha"],
 };
 
 // Photos for matcha spots — sourced from official websites and The Infatuation reviews
@@ -88,4 +104,22 @@ export const matchaPhotos: Record<string, string> = {
   // Archives Of Us — from official website
   "Archives Of Us":
     "https://archivesofus.com/cdn/shop/files/5_Service_Counter_Seating_Groups_Patio_by_yerin_mok.jpg?v=1742379443&width=800",
+
+  // La La Land Kind Cafe — from official website (Shopify CDN)
+  "La La Land (Montana Ave)":
+    "https://lalalandcafe.com/cdn/shop/files/santa_monica.png?v=1736266766&width=800",
+  "La La Land (The Grove)":
+    "https://lalalandcafe.com/cdn/shop/files/grove.png?v=1746745184&width=800",
+  "La La Land (3rd Street)":
+    "https://lalalandcafe.com/cdn/shop/files/third_street.png?v=1736266767&width=800",
+  "La La Land (Calabasas)":
+    "https://lalalandcafe.com/cdn/shop/files/calabasas.png?v=1736266767&width=800",
+  "La La Land (Americana)":
+    "https://lalalandcafe.com/cdn/shop/files/americana.png?v=1736266768&width=800",
+  "La La Land (Beverly Hills)":
+    "https://lalalandcafe.com/cdn/shop/files/Beverly_Hills_Store.jpg?v=1770848214&width=800",
+  "La La Land (Brentwood)":
+    "https://lalalandcafe.com/cdn/shop/files/LLL-11-2025-BRENTWOOD-STORE-CHARLOTTE-2.jpg?v=1764011658&width=800",
+  "La La Land (Westlake Village)":
+    "https://lalalandcafe.com/cdn/shop/files/promenade_at_westlake.png?v=1736266767&width=800",
 };

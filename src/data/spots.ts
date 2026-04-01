@@ -26,6 +26,14 @@ export const matchaSpots: Spot[] = [
   { name: "Maru Coffee (Arts District)", brand: "Maru Coffee", address: "1019 S Santa Fe Ave, Los Angeles, CA 90021", lat: 34.0302, lng: -118.2326, type: "matcha", rating: 4.7, reviewCount: 700 },
   { name: "Maru Coffee (Beverly Hills)", brand: "Maru Coffee", address: "201 N Canon Dr, Beverly Hills, CA 90210", lat: 34.0692, lng: -118.3988, type: "matcha", rating: 4.6, reviewCount: 227 },
   { name: "Archives Of Us", brand: "Archives Of Us", address: "555 N Spring St, Ste A201, Los Angeles, CA 90012", lat: 34.0584, lng: -118.2382, type: "matcha", rating: 4.6, reviewCount: 353 },
+  { name: "La La Land (Montana Ave)", brand: "La La Land Kind Cafe", address: "1426 Montana Ave, Santa Monica, CA 90403", lat: 34.0326, lng: -118.4944, type: "matcha", rating: 4.5, reviewCount: 450 },
+  { name: "La La Land (The Grove)", brand: "La La Land Kind Cafe", address: "189 The Grove Dr, Los Angeles, CA 90036", lat: 34.0722, lng: -118.3571, type: "matcha", rating: 4.4, reviewCount: 692 },
+  { name: "La La Land (3rd Street)", brand: "La La Land Kind Cafe", address: "8361 W 3rd St, Los Angeles, CA 90048", lat: 34.0732, lng: -118.3723, type: "matcha", rating: 4.5, reviewCount: 380 },
+  { name: "La La Land (Calabasas)", brand: "La La Land Kind Cafe", address: "4799 Commons Way, Calabasas, CA 91302", lat: 34.1537, lng: -118.6467, type: "matcha", rating: 4.3, reviewCount: 290 },
+  { name: "La La Land (Americana)", brand: "La La Land Kind Cafe", address: "763 Americana Way, Glendale, CA 91210", lat: 34.1437, lng: -118.2553, type: "matcha", rating: 4.4, reviewCount: 340 },
+  { name: "La La Land (Beverly Hills)", brand: "La La Land Kind Cafe", address: "341 N Canon Dr, Beverly Hills, CA 90210", lat: 34.0697, lng: -118.4006, type: "matcha", rating: 4.5, reviewCount: 210 },
+  { name: "La La Land (Brentwood)", brand: "La La Land Kind Cafe", address: "11698 San Vicente Blvd, Los Angeles, CA 90049", lat: 34.0535, lng: -118.4652, type: "matcha", rating: 4.4, reviewCount: 180 },
+  { name: "La La Land (Westlake Village)", brand: "La La Land Kind Cafe", address: "180 Promenade Way, Westlake Village, CA 91362", lat: 34.1584, lng: -118.8228, type: "matcha", rating: 4.3, reviewCount: 220 },
 ];
 
 export const innoutSpots: Spot[] = [
