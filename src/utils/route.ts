@@ -20,9 +20,11 @@ export interface SpotOnRoute {
 
 export async function getRoute(
   start: [number, number], // [lng, lat]
-  end: [number, number]
+  end: [number, number],
+  waypoints: [number, number][] = []
 ): Promise<RouteResult> {
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&overview=full&access_token=${MAPBOX_TOKEN}`;
+  const coords = [start, ...waypoints, end].map((c) => `${c[0]},${c[1]}`).join(";");
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&access_token=${MAPBOX_TOKEN}`;
   const res = await fetch(url);
   const data = await res.json();
   if (!data.routes?.length) throw new Error("No route found");
